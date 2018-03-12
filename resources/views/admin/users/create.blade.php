@@ -27,8 +27,8 @@
             {!! Form::password('password',['class'=>'form-control']) !!}
         </div>
         <div class='form-group'>
-            {!! Form::label('file','Photo:') !!}
-            {!! Form::file('file',['class'=>'']) !!}
+            {!! Form::label('photo_id','Photo:') !!}
+            {!! Form::file('photo_id',['class'=>'']) !!}
         </div>
         <div class='form-group'>
             {!! Form::submit('Create User',['class'=>'btn btn-primary']) !!}
