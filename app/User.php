@@ -38,4 +38,9 @@ class User extends Authenticatable
         return $this->belongsTo('App\Photo');
     }
 
+    public function isAdmin()
+    {
+        return $this->role->name == "administrator" ? true : false;
+    }
+
 }

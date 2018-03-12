@@ -12,7 +12,7 @@
     <title>Admin</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="{{asset('css/app.css')}}" rel="stylesheet">
+    {{--  <link href="{{asset('css/app.css')}}" rel="stylesheet">  --}}
 
     <link href="{{asset('js/libs.css')}}" rel="stylesheet">
 
@@ -50,6 +50,7 @@
 
         <ul class="nav navbar-top-links navbar-right">
 
+  
 
             <!-- /.dropdown -->
             <li class="dropdown">
@@ -348,7 +349,7 @@
 
 <!-- jQuery -->
 <script src="{{asset('js/libs.js')}}"></script>
-
+<script src="{{asset('js/app.js')}}"></script>
 
 @yield('footer')
 
