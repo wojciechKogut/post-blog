@@ -7,6 +7,7 @@ use App\User;
 use App\Role;
 use App\Photo;
 use App\Http\Requests\UsersRequest;
+use App\Http\Requests\UsersEditRequest;
 
 class AdminUsersController extends Controller
 {
@@ -19,6 +20,7 @@ class AdminUsersController extends Controller
     {
 
         $users = User::all();
+
 
         return view('admin.users.index', compact('users'));
     }
@@ -51,11 +53,12 @@ class AdminUsersController extends Controller
         if($file = $request->file('photo_id'))
         {   
             $photo = Photo::create(['file' => time() . $file->getClientOriginalName()]);
-            $file->move('images', $file->getClientOriginalName());  
+            $file->move('images', time() . $file->getClientOriginalName());  
             $data['photo_id'] = $photo->id;
         }
+   
 
-        $data['password'] = bcrypt($request->password);
+        $data['password'] = bcrypt(trim($request->password));
 
         User::create($data);
 
@@ -82,7 +85,13 @@ class AdminUsersController extends Controller
      */
     public function edit($id)
     {
-        //
+
+        $user = User::findOrFail($id);
+
+        $roles = Role::pluck('name','id')->all();
+
+        return view('admin.users.edit', compact(['user','roles']));
+
     }
 
     /**
@@ -92,9 +101,34 @@ class AdminUsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UsersEditRequest $request, $id)
     {
-        //
+
+        if(empty($request->password))
+        {
+            $data = $request->except('password');
+        }
+        else
+        {
+            $data = $request->all();
+            $data['password'] = bcrypt(trim($request->password));
+        }
+
+        $user = User::findOrFail($id);
+
+        if($file = $request->file('photo_id'))
+        {   
+            $photo = Photo::create(['file' => time() . $file->getClientOriginalName()]);
+            $file->move('images', time() . $file->getClientOriginalName());  
+            $data['photo_id'] = $photo->id;
+        }
+
+
+        
+        $user->update($data);
+
+       return redirect('admin/users');
+
     }
 
     /**

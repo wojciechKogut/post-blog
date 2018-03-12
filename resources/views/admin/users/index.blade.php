@@ -7,8 +7,9 @@
 <table class='table table-condensed'>
     <thead>
         <tr>
-            <th>Firstname</th>
-            <th>Lastname</th>
+            <th>Id</th>
+            <th>Photo</th>
+            <th>Username</th>
             <th>Email</th>
             <th>Role</th>
             <th>Status</th>
@@ -24,7 +25,8 @@
 
                 <tr>
                     <td>{{$user->id}}</td>
-                    <td>{{$user->name}}</td>
+                    <td><img style="height:50px" src="{{$user->photo ? $user->photo->file : '/images/user-placeholder.jpg'}}" alt=""></td>
+                    <td><a href="{{route('users.edit',$user->id)}}">{{$user->name}}</a></td>
                     <td>{{$user->email}}</td>
                     <td>{{$user->role->name}}</td>
                     <td>{{$user->is_active == 1 ? "Active" : "No active"}}</td>
