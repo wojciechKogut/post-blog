@@ -1,22 +1,44 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.admin')
 
-        <title>Laravel</title>
+@section('content')
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+<h1>Users</h1>
 
-        <link href="{{asset('css/app.css')}}" rel="stylesheet" type="text/css">
+<table class='table table-condensed'>
+    <thead>
+        <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Updated</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        @if(count($users) > 0)
 
-        <!-- Styles -->
-    </head>
-    <body>
+            @foreach($users as $user)
 
-        <h1>Hello</h1>
-      
-    </body>
-</html>
+                <tr>
+                    <td>{{$user->id}}</td>
+                    <td>{{$user->name}}</td>
+                    <td>{{$user->email}}</td>
+                    <td>{{$user->role->name}}</td>
+                    <td>{{$user->is_active == 1 ? "Active" : "No active"}}</td>
+                    <td>{{$user->created_at->diffForHumans()}}</td>
+                    <td>{{$user->updated_at->diffForHumans()}}</td>
+                </tr>
+
+            @endforeach    
+
+        @endif
+
+    </tbody>
+</table>
+
+
+
+@stop
