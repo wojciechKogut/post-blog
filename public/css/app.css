@@ -10004,3 +10004,17 @@ a.text-dark:focus {
   padding-top: 0;
 }
 
+#adminPanel {
+  position: relative;
+  width: 100px;
+}
+
+#adminPanel a {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  color: gray;
+  text-decoration: none;
+}
+

@@ -39,19 +39,7 @@
     {!! Form::close() !!}
 
 
-    @if(count($errors) > 0)
-
-        <div class="alert alert-danger">
-
-            @foreach($errors->all() as $error)
-
-            <li>{{$error}}</li>
-
-            @endforeach
-
-        </div>
-
-    @endif
+   @include('includes.form_error')
 
 
 @stop
