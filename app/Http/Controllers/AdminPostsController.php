@@ -8,6 +8,7 @@ use App\Http\Requests\PostsCreateRequest;
 use App\Post;
 use App\Photo;
 use App\Role;
+use App\Category;
 
 class AdminPostsController extends Controller
 {
@@ -32,7 +33,7 @@ class AdminPostsController extends Controller
     public function create()
     {
         //wybieram sposrod kategorii tylko nazwe i id
-        // $categories = Category::pluck('name','id')->all();
+        $categories = Category::pluck('name','id')->all();
         return view('admin.posts.create', compact('categories'));
     }
 
@@ -85,7 +86,9 @@ class AdminPostsController extends Controller
      */
     public function edit($id)
     {
-        return view('posts.edit');
+        $categories = Category::pluck('name','id')->all();
+        $post = Post::findOrFail($id);
+        return view('admin.posts.edit',compact('categories','post'));
     }
 
     /**
@@ -95,9 +98,28 @@ class AdminPostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostsCreateRequest $request, $id)
     {
-        //
+        $data = $request->all();
+
+        if($file = $request->file('photo_id'))
+        {
+
+            $photo = Photo::create(['file'=> time() . $file->getClientOriginalName()]);
+            $file->move('images',time() . $file->getClientOriginalName());
+            $data['photo_id'] = $photo->id;
+
+        }
+
+        // $post = Post::findOrFail($id);
+        // $post->update($data);
+
+        //drugi sposob
+        $post = Auth::user()->post()->where('id',$id)->first();
+        $post->update($data);
+
+        return redirect('admin/posts');
+
     }
 
     /**
@@ -108,6 +130,10 @@ class AdminPostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::findOrFail($id);
+        unlink(public_path() . $post->photo->file);
+        $post->delete();
+
+        return redirect('admin/posts');
     }
 }
