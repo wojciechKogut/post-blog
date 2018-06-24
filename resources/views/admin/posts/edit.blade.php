@@ -1,20 +1,11 @@
 @extends('layouts.admin')
-
-
 @section('content')
-
+@include('includes.tinyeditor')
 <h1>Edit User</h1>
-
 <div class="col-sm-3" style="height:300px">
-
-    <img src="{{$post->photo->file}}" alt="" class="img-responsive img-rounded">
-
-
+    <img src="{{config('app.url').$post->photo->file}}" alt="" class="img-responsive img-rounded">
 </div>
-
-
 <div class="col-sm-9">
-
     {!! Form::model($post,['method'=>'PATCH','action'=>['AdminPostsController@update',$post->id],'files'=>true]) !!}
     <div class='form-group'>
             {!! Form::label('Title','Title:') !!}
@@ -30,27 +21,19 @@
         </div>
         <div class='form-group'>
             {!! Form::label('body','Destription:') !!}
-            {!! Form::textarea('body',null,['class'=>'form-control']) !!} 
+            {!! Form::textarea('body',null,['class'=>'form-control','rows'=>20]) !!} 
         </div>
         <div class='form-group pull-left'>
             {!! Form::submit('Update Post',['class'=>'btn btn-primary']) !!}
         </div>
         {{ csrf_field() }}
-
     {!! Form::close() !!}
-
 <div class="pull-right">
     {!! Form::open(['method'=>'DELETE','action'=>['AdminPostsController@destroy',$post->id]]) !!}
-
         {!! Form::submit('Delete post',['class'=>'btn btn-danger']) !!}
-
     {!! Form::close() !!}
-
 </div>
-
-
 @include('includes.form_error')
-
 @stop
 
 

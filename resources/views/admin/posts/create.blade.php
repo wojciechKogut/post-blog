@@ -1,6 +1,8 @@
 @extends('layouts.admin')
 
 
+@include('includes.tinyeditor')
+
 
 @section('content')
 
@@ -27,7 +29,7 @@
     </div>
     <div class='form-group'>
         {!! Form::label('body','Destription:') !!}
-        {!! Form::textarea('body',null,['class'=>'form-control']) !!} 
+        {!! Form::textarea('body',null,['class'=>'form-control','rows'=>20]) !!} 
     </div>
     <div class='form-group'>
         {!! Form::submit('Create Post',['class'=>'btn btn-primary']) !!}

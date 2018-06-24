@@ -19,9 +19,7 @@ class AdminPostsController extends Controller
      */
     public function index()
     {
-
-        $posts = Post::all();
-
+        $posts = Post::paginate(5);
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -47,9 +45,7 @@ class AdminPostsController extends Controller
     {
 
         $data = $request->all();
-
         $data['user_id'] = Auth::user()->id;
-
         if($file = $request->file('photo_id'))
         {
             $photo = Photo::create(['file' => time() . $file->getClientOriginalName()]);
@@ -61,9 +57,7 @@ class AdminPostsController extends Controller
             $photo = Photo::create(['file' => 'img_placeholder.png']);
             $data['photo_id'] = $photo->id;
         }
-
         $post = Post::create($data);
-
         return redirect('admin/posts');
     }
 
@@ -104,23 +98,18 @@ class AdminPostsController extends Controller
 
         if($file = $request->file('photo_id'))
         {
-
             $photo = Photo::create(['file'=> time() . $file->getClientOriginalName()]);
             $file->move('images',time() . $file->getClientOriginalName());
             $data['photo_id'] = $photo->id;
-
         }
-
         // $post = Post::findOrFail($id);
         // $post->update($data);
-
         //drugi sposob
         $post = Auth::user()->post()->where('id',$id)->first();
         $post->update($data);
-
         return redirect('admin/posts');
-
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -133,7 +122,30 @@ class AdminPostsController extends Controller
         $post = Post::findOrFail($id);
         unlink(public_path() . $post->photo->file);
         $post->delete();
+        return redirect('admin/posts');
+    }
 
+
+
+    public function post($slug)
+    {
+        $post = Post::findBySlugOrFail($slug);
+        $comments = $post->comments()->whereIsActive(1)->get();
+        $categories = Category::all();
+        return view('post',compact('post','comments','categories'));
+    }
+
+
+
+    public function deleteMedia(Request $request)
+    {   
+        $data = $request->all();
+        foreach($data['checkboxes'] as $item)
+        {
+            $post = Post::findOrFail($item);
+            unlink(public_path() . $post->photo->file);
+            $post->delete();
+        }
         return redirect('admin/posts');
     }
 }

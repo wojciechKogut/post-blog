@@ -19,10 +19,7 @@ class AdminUsersController extends Controller
      */
     public function index()
     {
-
         $users = User::all();
-
-
         return view('admin.users.index', compact('users'));
     }
 
@@ -33,11 +30,8 @@ class AdminUsersController extends Controller
      */
     public function create()
     {
-
         $roles = Role::pluck('name','id')->all();
-
         return view('admin.users.create',compact('roles'));
-
     }
 
     /**
@@ -48,25 +42,17 @@ class AdminUsersController extends Controller
      */
     public function store(UsersRequest $request)
     {
-    
         $data = $request->all();        
-
         if($file = $request->file('photo_id'))
         {   
             $photo = Photo::create(['file' => time() . $file->getClientOriginalName()]);
             $file->move('images', time() . $file->getClientOriginalName());  
             $data['photo_id'] = $photo->id;
         }
-   
-
         $data['password'] = bcrypt(trim($request->password));
-
         User::create($data);
-
         Session::flash('created_user','User was created');
-
-       return redirect('admin/users');
-
+        return redirect('admin/users');
     }
 
     /**
@@ -88,15 +74,10 @@ class AdminUsersController extends Controller
      */
     public function edit($id)
     {
-
         $user = User::findOrFail($id);
-
         $roles = Role::pluck('name','id')->all();
-
         return view('admin.users.edit', compact(['user','roles']));
-
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -106,33 +87,22 @@ class AdminUsersController extends Controller
      */
     public function update(UsersEditRequest $request, $id)
     {
-
-        if(empty($request->password))
-        {
-            $data = $request->except('password');
-        }
+        if(empty($request->password))$data = $request->except('password');
         else
         {
             $data = $request->all();
             $data['password'] = bcrypt(trim($request->password));
         }
-
         $user = User::findOrFail($id);
-
         if($file = $request->file('photo_id'))
         {   
             $photo = Photo::create(['file' => time() . $file->getClientOriginalName()]);
             $file->move('images', time() . $file->getClientOriginalName());  
             $data['photo_id'] = $photo->id;
         }
-
-        
         $user->update($data);
-
         Session::flash('updated_user','User was updated');
-
-       return redirect('admin/users');
-
+        return redirect('admin/users');
     }
 
     /**
@@ -143,15 +113,10 @@ class AdminUsersController extends Controller
      */
     public function destroy($id)
     {
-
          Session::flash('deleted_user','User was successfuly deleted');
-
          $user = User::findOrFail($id);
-
          unlink(public_path() . $user->photo->file);
-
-         User::findOrFail($id)->delete();
-
+         $user->delete();
          return redirect('admin/users');
     }
 }

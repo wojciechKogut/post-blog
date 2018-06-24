@@ -24,7 +24,7 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Photo</th>
+            {{-- <th>Photo</th> --}}
             <th>Username</th>
             <th>Email</th>
             <th>Role</th>
@@ -41,7 +41,7 @@
 
                 <tr>
                     <td>{{$user->id}}</td>
-                    <td><img style="height:50px" src="{{$user->photo ? $user->photo->file : '/images/user-placeholder.jpg'}}" alt=""></td>
+                    {{-- <td><img style="height:50px" src="{{$user->photo ? $user->photo->file : '/images/user-placeholder.jpg'}}" alt=""></td> --}}
                     <td><a href="{{route('users.edit',$user->id)}}">{{$user->name}}</a></td>
                     <td>{{$user->email}}</td>
                     <td>{{$user->role->name}}</td>
